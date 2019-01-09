@@ -2,6 +2,8 @@ package main
 
 import (
 	"math/rand"
+	"sync"
+	"time"
 )
 
 func initCells(width, height int) (cells [][]int, err error) {
@@ -32,4 +34,23 @@ func checkThreshold(threshold float64) {
 	if !checkFloatMinimumValue(threshold, -1) {
 		panic(errMinimumThreshold)
 	}
+}
+
+func startRefresh(interval int, cells [][]int, threshold float64, done chan bool, m *sync.Mutex) {
+	ticker := time.NewTicker(time.Duration(interval) * time.Millisecond)
+	for {
+		select {
+		case <-ticker.C:
+			m.Lock()
+			computeNextFrame(cells, threshold)
+			m.Unlock()
+		case <-done:
+			return
+		default:
+		}
+	}
+}
+
+func stopRefresh(done chan bool) {
+	close(done)
 }
