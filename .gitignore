@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+doom-fire
 
 # Test binary, build with `go test -c`
 *.test
