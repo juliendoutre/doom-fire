@@ -1,10 +1,12 @@
-# Doom Fire
+# Doom Fire 🔥
 
-This project was inspired by the Fabien Sanglard's [article](http://fabiensanglard.net/doom_fire_psx/).
+This project was inspired by the Fabien Sanglard's [article](https://fabiensanglard.net/doom_fire_psx/).
 
 It generates a fire static image (for now) in your terminal.
 
 ![fire](img/fire.png)
+
+It uses the [termloop](https://github.com/JoelOtter/termloop) library for the display.
 
 ## Build the project
 
