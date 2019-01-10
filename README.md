@@ -2,9 +2,9 @@
 
 This project was inspired by the Fabien Sanglard's [article](https://fabiensanglard.net/doom_fire_psx/).
 
-It generates a fire static image (for now) in your terminal.
+It generates a fire simulation in your terminal.
 
-![fire](img/fire.png)
+![fire](img/fire.gif)
 
 It uses the [termloop](https://github.com/JoelOtter/termloop) library for the display.
 
@@ -124,5 +124,5 @@ and go to the same address on your browser.
 
 ## Roadmap
 
-* add dynamic animation
+* fix the race conditions
 * add tests

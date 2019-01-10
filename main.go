@@ -25,14 +25,16 @@ func main() {
 
 	for i := 0; i < width; i++ {
 		for j := 0; j < height; j++ {
-			m.Lock()
-			l.AddEntity(tl.NewRectangle(i, j, 1, 1, tl.RgbTo256Color(colorMap[cells[j][i]].r, colorMap[cells[j][i]].g, colorMap[cells[j][i]].b)))
-			m.Unlock()
+			l.AddEntity(&point{
+				tl.NewRectangle(i, j, 1, 1, tl.RgbTo256Color(colorMap[cells[j][i]].r, colorMap[cells[j][i]].g, colorMap[cells[j][i]].b)),
+				m, i, j, cells,
+			})
 		}
 	}
 
-	g.Start()
 	go startRefresh(166, cells, threshold, done, m)
+
+	g.Start()
 
 	go stopRefresh(done)
 }

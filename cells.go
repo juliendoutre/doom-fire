@@ -41,9 +41,9 @@ func startRefresh(interval int, cells [][]int, threshold float64, done chan bool
 	for {
 		select {
 		case <-ticker.C:
-			m.Lock()
+			//m.Lock()
 			computeNextFrame(cells, threshold)
-			m.Unlock()
+			//m.Unlock()
 		case <-done:
 			return
 		default:
