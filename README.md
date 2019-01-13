@@ -126,3 +126,5 @@ and go to the same address on your browser.
 
 * fix the race conditions
 * add tests
+* add command (wind control with left/right arrows and fire propagation with up/down arrow)
+* add extinction animation on Ctrl + C
