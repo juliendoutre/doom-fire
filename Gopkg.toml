@@ -1,0 +1,7 @@
+[[constraint]]
+  branch = "master"
+  name = "github.com/JoelOtter/termloop"
+
+[prune]
+  go-tests = true
+  unused-packages = true

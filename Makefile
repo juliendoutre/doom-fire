@@ -1,30 +1,38 @@
+SHELL := $(shell which bash)
+ENV := /usr/bin/env
 PROJECT_NAME := "doom-fire"
 PKG := "github.com/juliendoutre/$(PROJECT_NAME)"
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
-GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/ | grep -v _test.go)
+OSARCH := "linux/amd64 linux/386 windows/amd64 windows/386 darwin/amd64 darwin/386"
 
-.PHONY: all dep build clean test race cover
+.PHONY: all dep build clean test
 
-all: build
+all: clean dep vet fmt test build
 
-test: dep ## Run unittests
-	@go test -short ${PKG_LIST}
+clean:
+	@rm -f c.out
+	@rm -f coverage.html
+	@rm -rf bin/
+	@rm -rf vendor/
 
-cover: ## Compute the project's test coverage
-	@go test -cover ${PKG_LIST}
+dep:
+	go get -v -u github.com/golang/dep/cmd/dep && \
+	go get -v -u github.com/mitchellh/gox && \
+	dep ensure -v -vendor-only
 
-race: dep ## Run data race detector
-	@go test -race ${PKG_LIST}
+fmt:
+	go fmt ${PKG_LIST}
 
-dep: ## Get the dependencies
-	@go get -v -d ./...
-	@go get -u github.com/JoelOtter/termloop
+vet:
+	go vet ${PKG_LIST}
 
-build: dep ## Build the binary file
-	@env GOOS=${GOOS} GOARCH=${GOARCH} go build -i -v $(PKG)
+test: dep
+	go test -cover -coverprofile=c.out ${PKG_LIST}
+	go tool cover -html=c.out -o .coverage.html
+	@rm -f c.out
 
-clean: ## Remove previous build
-	@rm -f $(PROJECT_NAME)
+build: dep
+	env GOOS=${GOOS} GOARCH=${GOARCH} go build -i -o "bin/$(PROJECT_NAME)" -v $(PKG)
 
-help: ## Display this help screen
-	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+cross: dep
+	gox -osarch=$(OSARCH) -output "bin/$(PROJECT_NAME)_{{.OS}}_{{.Arch}}"

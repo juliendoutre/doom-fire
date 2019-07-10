@@ -20,37 +20,36 @@ make
 
 in the project directory to build the binary file.
 
-Be careful to respect the project path in your go installation: `$GOPATH/src/github.com/juliendoutre/doom-fire`.
+### Cross build
 
-### With Docker
-
-If you wish to build the executable in a Docker container, you can run
+Run
 
 ```shell
-docker build -t doom-fire:1.0 .
-docker run --rm -v "$PWD":/go/src/github.com/juliendoutre/doom-fire doom-fire:1.0 make
+make cross
 ```
 
-in the project directory.
+to build the binary for the following architectures:
 
-You can specify the architecture, by passing variables to make:
-
-```shell
-docker run --rm -v "$PWD":/go/src/github.com/juliendoutre/doom-fire doom-fire:1.0 make GOARCH=amd64 GOOS=darwin
-```
+- linux/amd64
+- linux/386
+- windows/amd64
+- windows/386
+- darwin/amd64
+- darwin/386
 
 ## Run the program
 
-You can run the program simply with:
+You can run the program with:
 
 ```shell
 ./doom-fire
 ```
 
 You can set some parameters using the following flags:
-* `-w int` to set the canvas width *(default 100)*
-* `-h int` to set the canvas height *(default 37)*
-* `-t float` to set a threshold value modifying the fire decay speed (it also influences the wind force) *(default 4.5)*
+
+- `-w <int>` to set the canvas width _(default 100)_
+- `-h <int>` to set the canvas height _(default 37)_
+- `-t <float>` to set a threshold value modifying the fire decay speed (it also influences the wind force) _(default 4.5)_
 
 ## Run the tests
 
@@ -60,41 +59,7 @@ To run the project tests, you can use `make` and run
 make test
 ```
 
-or Docker and run
-
-```shell
-docker run --rm doom-fire:1.0 make test
-```
-
-### Tests coverage
-
-You can see the tests coverage by running
-
-```shell
-make cover
-```
-
-or
-
-```shell
-docker run --rm doom-fire:1.0 make cover
-```
-
-### Tests race
-
-Run
-
-```shell
-make race
-```
-
-or
-
-```shell
-docker run --rm doom-fire:1.0 make race
-```
-
-to run the concurrency tests.
+The tests coverage is displayed in `.coverage.html`.
 
 ## Documentation
 
@@ -114,17 +79,9 @@ You can install godoc with
 go get golang.org/x/tools/cmd/godoc
 ```
 
-You can also use Docker:
-
-```shell
-docker run --rm -p <port>:<port> doom-fire:1.0 godoc -http :<port>
-```
-
-and go to the same address on your browser.
-
 ## Roadmap
 
-* fix the race conditions
-* add tests
-* add command (wind control with left/right arrows and fire propagation with up/down arrow)
-* add extinction animation on Ctrl + C
+- fix the race conditions
+- add tests
+- add command (wind control with left/right arrows and fire propagation with up/down arrow)
+- add extinction animation on Ctrl + C
