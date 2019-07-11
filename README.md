@@ -51,6 +51,8 @@ You can set some parameters using the following flags:
 - `-h <int>` to set the canvas height _(default 37)_
 - `-t <float>` to set a threshold value modifying the fire decay speed (it also influences the wind force) _(default 4.5)_
 
+You can the keyboard arrows to increase or decrease the fire propagation force (`UP` and `DOWN`) and the wind direction (`LEFT` and `RIGHT`).
+
 ## Run the tests
 
 To run the project tests, you can use `make` and run
@@ -78,10 +80,3 @@ You can install godoc with
 ```shell
 go get golang.org/x/tools/cmd/godoc
 ```
-
-## Roadmap
-
-- fix the race conditions
-- add tests
-- add command (wind control with left/right arrows and fire propagation with up/down arrow)
-- add extinction animation on Ctrl + C

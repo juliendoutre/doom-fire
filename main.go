@@ -1,21 +1,19 @@
 package main
 
 import (
-	"sync"
+	"time"
 
 	tl "github.com/JoelOtter/termloop"
+	"github.com/juliendoutre/doom-fire/grid"
 )
 
 func main() {
 	width, height, threshold := parseArgs()
-	checkThreshold(threshold)
 
-	cells, err := initCells(width, height)
-	checkError(err)
-
-	m := &sync.Mutex{}
-
-	done := make(chan bool)
+	gr, err := grid.New(width, height, len(colorMap)-1, threshold)
+	if err != nil {
+		panic(err)
+	}
 
 	g := tl.NewGame()
 	l := tl.NewBaseLevel(tl.Cell{})
@@ -23,18 +21,31 @@ func main() {
 	g.Screen().SetLevel(l)
 	g.Screen().EnablePixelMode()
 
+	l.AddEntity(&eventCatcher{
+		tl.NewRectangle(0, 0, 0, 0, tl.RgbTo256Color(0, 0, 0)),
+		gr,
+	})
+
 	for i := 0; i < width; i++ {
 		for j := 0; j < height; j++ {
-			l.AddEntity(&point{
-				tl.NewRectangle(i, j, 1, 1, tl.RgbTo256Color(colorMap[cells[j][i]].r, colorMap[cells[j][i]].g, colorMap[cells[j][i]].b)),
-				m, i, j, cells,
-			})
+			color := colorMap[gr.Cell(j, i)]
+			l.AddEntity(
+				&point{
+					tl.NewRectangle(
+						i, j, 1, 1,
+						tl.RgbTo256Color(
+							color.r,
+							color.g,
+							color.b,
+						),
+					),
+					i, j, gr,
+				},
+			)
 		}
 	}
 
-	go startRefresh(166, cells, threshold, done, m)
+	go gr.Start(166 * time.Millisecond)
 
 	g.Start()
-
-	go stopRefresh(done)
 }
